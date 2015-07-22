@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- ====================================================================== 
+     20 февр. 2015 г. 13:17:16                                                        
+
+     jget    
+     jget - console utility for file batch downloading with speed throttling
+     command line arguments:
+		-n number of working thread (1,2,3,4....)
+		-l overall speed limit for all working threads b/s (may use suffixes according IEC60027-2 (http://physics.nist.gov/cuu/Units/binary.html))
+		-f input file name
+		-o output folder                   
+     mda                                                                
+     ====================================================================== -->
+<project name="jget" default="dist" basedir="./">
+	<description>
+        jget - console utility for file batch downloading with speed throttling
+        command line arguments:
+   		-n number of working threads (1,2,3,4....)
+   		-l overall speed limit for all working threads b/s (may use suffixes according IEC60027-2 (http://physics.nist.gov/cuu/Units/binary.html))
+   		-f input file name
+   		-o output folder                   
+    </description>
+
+	<property name="ver" value="0.1.0" />
+	<property name="src" location="./src" />
+	<property name="build" location="./build" />
+	<property name="javadocs" location="./javadocs" />
+	<property name="dist" location="./dist" />
+	<property name="mainclass" value="by.justsoft.jget.Main" />
+
+
+	<target name="init">
+		<mkdir dir="${build}" />
+		<mkdir dir="${javadocs}" />
+	</target>
+
+	<target name="compile" depends="init" description="compile the source">
+		<javac srcdir="${src}" destdir="${build}" />
+	</target>
+
+	<target name="javadoc" depends="init" description="javadoc generation">
+		<javadoc destdir="${javadocs}" author="true" version="true" use="true" windowtitle="jGet documentation" overview="docs/overview.html">
+
+			<fileset dir="src" defaultexcludes="yes">
+				<include name="by/justsoft/jget/**" />
+			</fileset>
+
+			<doctitle><![CDATA[<h1>jGet - java file downloader</h1>]]></doctitle>
+			<bottom><![CDATA[<i style="float:right;">Copyright &#169; 2015 justsoft.by</i>]]></bottom>
+			<tag name="todo" scope="all" description="To do:" />
+		</javadoc>
+	</target>
+
+	<target name="dist" depends="compile,javadoc" description="generate the jar">
+		<jar jarfile="${dist}/jget-${ver}.jar" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value="${mainclass}" />
+			</manifest>
+		</jar>
+	</target>
+	
+	<target name="clean" description="clean up">
+		<delete dir="${build}" />
+		<delete dir="${dist}" />
+		<delete dir="${javadocs}" />
+	</target>
+
+</project>
